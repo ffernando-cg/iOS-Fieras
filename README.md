@@ -1,2 +1,2 @@
 # iOS-Fieras
-Team conformed by:
+## The name of this repo is temporary, it may change the name alongside the semester
