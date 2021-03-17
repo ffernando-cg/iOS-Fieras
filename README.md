@@ -1,4 +1,4 @@
-# first_exam_flutter
+# components_practice
 
 A new Flutter project.
 
