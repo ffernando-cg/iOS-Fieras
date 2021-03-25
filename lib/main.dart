@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'src/pages/homepage_alternativo.dart';
- 
+import 'package:navigation_practice/src/pages/home_page.dart';
+
 void main() => runApp(MyApp());
- 
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'listTitle App',
+      title: 'Navigation Practice',
       debugShowCheckedModeBanner: false,
-      home:HomePageAlternativo()
+      home: HomePage(),
     );
   }
 }

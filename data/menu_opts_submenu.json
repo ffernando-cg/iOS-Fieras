@@ -1,0 +1,34 @@
+{
+  "subroute":[
+  {
+    "mini-route":"Pagina 1 de alertas",
+    "icon": "add_alert",
+    "text": "Alertas 1"
+  },
+  {
+    "mini-route":"Pagina 2 de alertas",
+    "icon": "add_alert",
+    "text": "Alertas 2"
+  },
+  {
+    "mini-route":"Pagina 1 de avatar",
+    "icon": "accessibility",
+    "text": "Avatar 1"
+  },
+  {
+    "mini-route":"Pagina 2 de avatar",
+    "icon": "accessibility",
+    "text": "Avatar 2"
+  },
+  {
+    "mini-route":"Pagina 1 de tarjetas",
+    "icon": "folder_open",
+    "text": "Cards - Tarjetas 1"
+  },
+  {
+    "mini-route":"Pagina 2 de tarjetas",
+    "icon": "folder_open",
+    "text": "Cards - Tarjetas 2"
+  }
+  ]
+}
