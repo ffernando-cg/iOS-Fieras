@@ -1,4 +1,4 @@
-# first_exam_flutter
+# second_exam_flutter
 
 A new Flutter project.
 
