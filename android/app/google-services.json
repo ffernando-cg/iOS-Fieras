@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "941838039427",
+    "project_id": "appleonproyect",
+    "storage_bucket": "appleonproyect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941838039427:android:f2242f4ddea2e6e7df1eb6",
+        "android_client_info": {
+          "package_name": "com.example.app_leon_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "941838039427-mvupvd954sg4ihtp1m1nslrul86on9mn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLVh79ydC-PNs19_WxC851mRU5l9XIQjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "941838039427-mvupvd954sg4ihtp1m1nslrul86on9mn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

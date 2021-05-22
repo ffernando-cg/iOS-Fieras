@@ -1,8 +1,14 @@
-
+import 'dart:async';
 import 'package:app_leon_project/src/pages/login_page.dart';
 import 'package:app_leon_project/src/routes/routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-void main() => runApp(MyApp());
+
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
  
 class MyApp extends StatelessWidget {
   @override

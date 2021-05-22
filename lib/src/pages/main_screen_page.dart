@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_leon_project/src/pages/myprofile_page.dart';
 import 'package:app_leon_project/src/providers/map_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_search_bar/flutter_search_bar.dart';
@@ -28,13 +29,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
       ),
       ]
     ),
-    ListView(
-      children: <Widget>[
-        Text(
-        'Profile',
-        style: optionStyle,
-      ),
-      ]
+    Scaffold(
+      body: MyProfilePage()
     ),
     ListView(
       children: <Widget>[
@@ -85,4 +81,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
       ),
     );
   }
-}
+  }
+
+
+  
