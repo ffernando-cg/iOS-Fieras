@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class RegisterPage extends StatefulWidget{
   @override
@@ -7,21 +9,26 @@ class RegisterPage extends StatefulWidget{
 }
 
 class _RegisterPage extends State<RegisterPage> {
-  String _nomcom, _apellidos, _sexo, _curp, _pass, _conpass, _fecha;
-  int _value = 1;
+  String _nomcom, _apellidos, _curp, _pass, _conpass, _fecha;
+  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  final _formKeyRegister = GlobalKey<FormState>();
+
+  bool isCurpError=false, isPassError=false, isConfirmPassError=false;
+  int _value = 1;
+  
   TextEditingController _inputFieldDateController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var padding;
     return Scaffold(
         appBar: AppBar(
           title: Text('Registrarse'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.more_vert),
-              tooltip: 'Preguntas?',
+              tooltip: 'Dudas? Seguimos',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Todos los datos pedidos son para su seguirdad y evitar acciones fraudulentas')));
@@ -29,7 +36,9 @@ class _RegisterPage extends State<RegisterPage> {
           ),
           ],
         ),
-        body: Container(
+        body: Form(
+          key: _formKeyRegister,
+          child: Container(
             margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
             child: ListView(children: <Widget>[
               Container(
@@ -73,43 +82,28 @@ class _RegisterPage extends State<RegisterPage> {
                       padding: EdgeInsets.only(bottom: 25.0),
                       child:_crearFecha(this.context),
                     ),
-
-                    // DROPDOWN PARA EL SEXO PREGUNTAR AL EQUIPO AL RESPECTO
-                   /* DropdownButton(
-                        value: _value,
-                        items: [
-                          DropdownMenuItem(
-                            child: Text("Mujer"),
-                            value: 1,
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Hombre"),
-                            value: 2,
-                          ),
-                          DropdownMenuItem(
-                            child: Text("Otro"),
-                            value: 3,
-                          )
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _value = value;
-                          });
-                        }),*/
                     Padding(
                       padding: EdgeInsets.only(bottom: 25.0),
                       child:TextFormField(
+                      textCapitalization: TextCapitalization.characters,
                       decoration: InputDecoration(
                         border:  OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20.0),),
                           ),
                         labelText: 'CURP',
                       ),
-                      validator: (String val) {
-                        if (val.trim().isEmpty) {
-                          return ('CURP is required');
+                      validator: (String val){
+                        if(isCurpError){
+                          return('El curp proporcionado no existe');
                         }
-                        _curp = val.trim();
+                        if(val.trim().isEmpty){
+                          return('CURP is required');
+                        }
+                        if( val.trim().length <=17 )
+                          return ('El CURP proporcionado esta incompleto');
+                        if(val.trim().length >= 19) 
+                          return('El CURP es demasiado largo');
+                        _curp = '${val.trim()}@fieras.com';
                       },
                     ),
                     ),
@@ -125,12 +119,19 @@ class _RegisterPage extends State<RegisterPage> {
                           ),
                         labelText: 'Contraseña',
                       ),
-                      validator: (String val) {
-                        if (val.trim().isEmpty) {
-                          return ('Password is required');
-                        }
-                        _pass = val.trim();
-                      },
+                      validator: (String val){
+                          if(isPassError){
+                            return('La contraseña proporcionada es incorrecta');
+                          }
+                          if(val.trim().isEmpty){
+                            return('La contraseña es requerida');
+                          }
+                          if(val.trim().length <= 5 )
+                          return('La contraseña es muy corta');
+
+
+                          _pass = val.trim();
+                        },
                     ),
                     ),
                     Padding(
@@ -142,29 +143,56 @@ class _RegisterPage extends State<RegisterPage> {
                       decoration: InputDecoration(
                         border:  OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20.0),),
-                            
                           ),
                         labelText: 'Confirmar contraseña',
                       ),
-                      validator: (String val) {
-                        if (val.trim().isEmpty) {
-                          return ('Password is required');
-                        }
-                        _conpass = val.trim();
-                      },
+                     /* onChanged: (String val){
+                        setState(() {
+                          _conpass = val.trim();
+                        });
+                      },*/
+                      validator: (String val){
+                          if(isConfirmPassError){
+                            return('La contraseñas no coinciden');
+                          }
+                          if(val.trim().isEmpty){
+                            return('La contraseña es requerida');
+                          }
+                          if(val.trim().length <= 5 )
+                          return('La contraseña es muy corta');
+
+
+                          _conpass = val.trim();
+                        },
                     ),
                     )
                   ])),
-                    FloatingActionButton(
-              onPressed: () {
-                // Add your onPressed code here!
+                    ElevatedButton(
+                      onPressed: (){
+                        if(_conpass != _pass){
+                          isConfirmPassError=true;
+                        }
+
+                        if(_formKeyRegister.currentState.validate()){
+                          _tryRegister(_curp, _pass, context);
+                        }else{
+                          AlertDialog(
+                            title: const Text('AlertDialog Title'),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: const <Widget>[
+                                  Text('This is a demo alert dialog.'),
+                                  Text('Would you like to approve of this message?'),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
               },
               child: const Icon(Icons.check),
-              backgroundColor: Colors.green,
             ),
-            ])));
+            ]))));
   }
-
 
  Widget _crearFecha(BuildContext context) {
 
@@ -197,42 +225,47 @@ class _RegisterPage extends State<RegisterPage> {
 
       if(picked != null){
         setState(() {
-          _fecha = '$picked.day / $picked.month / $picked.year';
+          _fecha = DateFormat('dd/MM/yyyy').format(picked).toString();
+          _inputFieldDateController.text = _fecha.toString();
         });
       }
   }
 
+  Widget _tryRegister(String curp, String pass, BuildContext context) {
+    auth.createUserWithEmailAndPassword(email: curp, password: pass).then(
+          (cred) { 
+            
+            _firestore.collection('usuariosLeon').doc(cred.user.uid).set({
+                'nombre': _nomcom,
+                'apellidos': _apellidos,
+                'fechnam': _fecha
+            });
 
-
-}
-
-validate(String curp, String password, BuildContext context) {
-  //TODO Send to API the props to verify with database
-  //
-}
-
-Color getColorForTextBttn(Set<MaterialState> states) {
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed,
-    MaterialState.hovered,
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.orangeAccent;
+            return AlertDialog(
+              title: const Text('Usuario creado'),
+              content: const Text('Usuario creado correctamente, ahora puede iniciar sesión'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, '/'),
+                  child: const Text('OK'),
+                ),
+              ],
+            ); 
+          }
+        ).catchError((e){
+          switch (e.message) {
+                case 'There is no user record corresponding to this identifier. The user may have been deleted.':
+                  isCurpError=true;
+                  _formKeyRegister.currentState.validate();
+                  break;
+                case 'The password is invalid or the user does not have a password.':
+                  isPassError=true;
+                  _formKeyRegister.currentState.validate();
+                  break;
+                default:
+                  print('Case ${e.message} is not yet implemented');
+              }
+        }); 
+        return null;
   }
-  return Colors.blue[100];
 }
-
-Color getColorForElevatedButton(Set<MaterialState> states) {
-  const Set<MaterialState> interactiveStates = <MaterialState>{
-    MaterialState.pressed,
-    MaterialState.hovered,
-    MaterialState.focused,
-  };
-  if (states.any(interactiveStates.contains)) {
-    return Colors.blue;
-  }
-  return Colors.orange[300];
-}
-
-

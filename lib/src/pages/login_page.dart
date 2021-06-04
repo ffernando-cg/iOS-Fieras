@@ -12,15 +12,10 @@ class LoginPage extends StatelessWidget {
     if( auth.currentUser != null ){
      Navigator.pushNamed(context, 'mapscreen');
     }
-
  
     var _controllerCURP = TextEditingController();
     
-
     return Scaffold(  
-      // appBar: AppBar(
-      //  title: Text('LoginPage'),
-      // ),
       body: Container(
         margin: const EdgeInsets.only(top:80.0,left: 20.0, right: 20.0),
         child: ListView(
@@ -126,7 +121,6 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-
   _tryLogin(String curp, String pass, BuildContext context){
         auth.signInWithEmailAndPassword(email: curp, password: pass).then(
           (value) => Navigator.pushNamed(context, 'mapscreen')
@@ -146,10 +140,6 @@ class LoginPage extends StatelessWidget {
         }); 
   }
 }
-
-
-      
-
 
   Color getColorForTextBttn(Set<MaterialState> states) {
       const Set<MaterialState> interactiveStates = <MaterialState>{
