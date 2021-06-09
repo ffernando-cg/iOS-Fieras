@@ -112,17 +112,7 @@ class _ProductPageState extends State<ProductPage> {
     formKey.currentState.save();
     print('Todo fine');
 
-    print(producto.titulo);
-    print(producto.valor);
-    print(producto.disponible);
-
-    if(producto.id == null){
-      productoProvider.crearProducto(producto);
-    }else{
-
-    }
-
-
-    //productoProvide.crearProducto();
+    productoProvider.crearProducto(producto);
+    
   }
 }
