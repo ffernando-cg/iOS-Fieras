@@ -1,6 +1,6 @@
+import 'package:blocpattern/src/bloc/provider.dart';
 import 'package:flutter/material.dart';
-import 'package:formvalidation/src/bloc/login_bloc.dart';
-import 'package:formvalidation/src/bloc/provider.dart';
+import 'package:flutter/widgets.dart';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -130,15 +130,14 @@ class LoginPage extends StatelessWidget {
           child: TextField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
-              icon: Icon(
-                Icons.alternate_email,
-                color: Colors.deepPurple,
-              ),
-              hintText: 'ejemplo@dominio.com',
-              labelText: 'Correo electrónicos',
-              counterText: snapshot.data,
-              errorText: snapshot.error
-            ),
+                icon: Icon(
+                  Icons.alternate_email,
+                  color: Colors.deepPurple,
+                ),
+                hintText: 'ejemplo@dominio.com',
+                labelText: 'Correo electrónicos',
+                counterText: snapshot.data,
+                errorText: snapshot.error),
             onChanged: bloc.changeEmail,
           ),
         );
@@ -148,24 +147,23 @@ class LoginPage extends StatelessWidget {
 
   Widget _crearPassword(LoginBloc bloc) {
     return StreamBuilder(
-      stream: bloc.passwordStream ,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-      return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        obscureText: true,
-        decoration: InputDecoration(
-          icon: Icon(
-            Icons.lock,
-            color: Colors.deepPurple,
+      stream: bloc.passwordStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+                icon: Icon(
+                  Icons.lock,
+                  color: Colors.deepPurple,
+                ),
+                labelText: 'Contraseña',
+                counterText: snapshot.data,
+                errorText: snapshot.error),
+            onChanged: bloc.changePassword,
           ),
-          labelText: 'Contraseña',
-          counterText: snapshot.data,
-          errorText: snapshot.error
-        ),
-        onChanged: bloc.changePassword,
-      ),
-    );
+        );
       },
     );
   }
@@ -173,26 +171,31 @@ class LoginPage extends StatelessWidget {
   Widget _crearBoton(LoginBloc bloc) {
     return StreamBuilder(
       stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return RaisedButton(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-        child: Text('Ingresar'),
-      ),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
-      ),
-      elevation: 0.0,
-      color: Colors.deepPurple,
-      textColor: Colors.white,
-      onPressed: snapshot.hasData? ()=>_login(bloc, context) :null,
-    );
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+            child: Text('Ingresar'),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          ),
+          elevation: 0.0,
+          color: Colors.deepPurple,
+          textColor: Colors.white,
+          //onPressed: snapshot.hasData ?(){}:null,
+          onPressed: snapshot.hasData ? ()=>_login(bloc, context):null,
+        );
       },
     );
   }
   _login(LoginBloc bloc, BuildContext context){
+    print('=========================');
     print('Email: ${bloc.email}');
-    print('Email: ${bloc.password}');
+    print('Password: ${bloc.password}');
+    print('=========================');
+
     Navigator.pushReplacementNamed(context, 'home');
+
   }
 }

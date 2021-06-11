@@ -15,13 +15,12 @@ class Validators{
       }
     }
   );
-  final validarPassword = StreamTransformer<String,String>.fromHandlers(
+  final validarPassword =  StreamTransformer<String,String>.fromHandlers(
     handleData: (password,sink){
-      if (password.length>=6){
+      if(password.length >= 6){
         sink.add(password);
-      }
-      else{
-        sink.addError('Necesita un contraseña');
+      }else{
+        sink.addError('Necesita una contraseña más larga');
       }
     }
   );

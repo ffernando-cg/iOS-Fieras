@@ -1,4 +1,4 @@
-name: formvalidation
+name: blocpattern
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -28,10 +28,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  rxdart : ^0.27.0
+  rxdart: ^0.27.0
   http:
-  firebase_core: ^1.0.3
-  firebase_database: ^7.0.0
+  image_picker:
+  mime_type:
+  
 
 dev_dependencies:
   flutter_test:
@@ -49,8 +50,8 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+    - assets/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
