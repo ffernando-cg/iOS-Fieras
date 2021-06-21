@@ -13,12 +13,10 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  String _fecha;
+  String _fecha, _nombre, _apellido, _curp;
   var currentData;
   
   TextEditingController _inputFieldDateController = new TextEditingController();
-  TextEditingController _nombresController = new TextEditingController();
-  TextEditingController _apellidosController = new TextEditingController();
   TextEditingController _curpController = new TextEditingController();
 
   final _formKeyRegister = GlobalKey<FormState>();
@@ -38,12 +36,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
           currentData = value.data();
           setState(() {
             _curpController.text = user.email.split('@')[0].toUpperCase();
-            _nombresController.text = currentData["nombre"];
-            _apellidosController.text = currentData["apellidos"];
-            _inputFieldDateController.text = currentData["fechnam"];
+            _curp = _curpController.text;
+            _nombre = currentData["nombre"];
+            _apellido = currentData["apellidos"];
           });
         }
       );
+
+      _tryUpdate(BuildContext context){
+      _firestore.collection('usuariosLeon').doc(uid).update({
+        "apellidos":_apellido,
+        "fechnam": _fecha.toString(),
+        "nombre": _nombre,
+      }).then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(
+             const SnackBar(
+              content: Text('Cuenta modificada correctamente'),
+            ),
+          );
+          Navigator.pop(context);
+      }
+      );
+  }
 
     return Scaffold(
         appBar: AppBar(
@@ -62,6 +76,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       padding: EdgeInsets.only(bottom: 25.0),
                       child:TextFormField(
                       textCapitalization: TextCapitalization.characters,
+                      controller: _curpController,
                       readOnly: true,
                       decoration: InputDecoration(
                         border:  OutlineInputBorder(
@@ -80,13 +95,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           return ('El CURP proporcionado esta incompleto');
                         if(val.trim().length >= 19) 
                           return('El CURP es demasiado largo');
-                        ////////////////////////////////////////////////_curp = '${val.trim()}@fieras.com';
+                        _curp = '${val.trim()}@fieras.com';
                       },
                     ),
                     ),
                      Padding(
                       padding: EdgeInsets.only(bottom: 25.0),
                       child:TextFormField(
+                        key: Key(_nombre.toString()),
+                        initialValue: _nombre.toString(),
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20.0),),
@@ -96,13 +113,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         if (val.trim().isEmpty) {
                           return ('Name is required');
                         }
-                        //////////////////////////////////////////////////_nombres = val.trim();
+                        _nombre = val.trim();
                       },
                     ),
                     ),
                      Padding(
                       padding: EdgeInsets.only(bottom: 25.0),
                       child:TextFormField(
+                        key: Key(_apellido.toString()),
+                        initialValue: _apellido.toString(),
                       decoration: InputDecoration(
                         border:  OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20.0),),
@@ -113,7 +132,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         if (val.trim().isEmpty) {
                           return ('Apellido is required');
                         }
-                        /////////////////////////////////////////////_apellidos = val.trim();
+                        _apellido = val.trim();
                       },
                     ),
                     ),
@@ -129,15 +148,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         // }
 
                         if(_formKeyRegister.currentState.validate()){
-                          //-------------------------------------------------------------------_tryUpdate(_curp, _pass, context);
+                          _tryUpdate(context);
                         }else{
                           AlertDialog(
-                            title: const Text('AlertDialog Title'),
+                            title: const Text('Hay campos incorrectos'),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: const <Widget>[
-                                  Text('This is a demo alert dialog.'),
-                                  Text('Would you like to approve of this message?'),
+                                  Text('Porfavor verifique los campos'),
+                                  Text('Talvez haya algun error en ellos'),
                                 ],
                               ),
                             ),
@@ -147,10 +166,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
               child: const Icon(Icons.check),
             ),
             ]))));
+
+            
   }
 
  Widget _crearFecha(BuildContext context) {
-
     return TextFormField(
       controller: _inputFieldDateController,
       enableInteractiveSelection: false,
@@ -167,15 +187,21 @@ class _EditProfilePageState extends State<EditProfilePage> {
         FocusScope.of(context).requestFocus(new FocusNode());
         _selectFecha(context);
         },
+        validator: (String val){
+          if(val.trim().isEmpty){
+            return ('Fecha no seleccionada');
+          }
+        },
     );
+    
   }
 
   void _selectFecha(BuildContext context) async {
     DateTime picked = await showDatePicker(
       context: context, 
       initialDate: new DateTime.now(), 
-      firstDate: new DateTime(2017), 
-      lastDate: new DateTime(2030)
+      firstDate: new DateTime(1900), 
+      lastDate: new DateTime(2022)
       );
 
       if(picked != null){
@@ -185,4 +211,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         });
       }
   }
+
+
+  
 }
