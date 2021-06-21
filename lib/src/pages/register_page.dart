@@ -9,7 +9,7 @@ class RegisterPage extends StatefulWidget{
 }
 
 class _RegisterPage extends State<RegisterPage> {
-  String _nomcom, _apellidos, _curp, _pass, _conpass, _fecha;
+  String _nomcom, _apellidos, _curp, _pass, _conpass, _fecha, _sexo;
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -52,7 +52,7 @@ class _RegisterPage extends State<RegisterPage> {
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(20.0),),
                           ),
-                          labelText: 'Nombre Completo'),
+                          labelText: 'Nombre(s)'),
                       validator: (String val) {
                         if (val.trim().isEmpty) {
                           return ('Name is required');
@@ -177,12 +177,12 @@ class _RegisterPage extends State<RegisterPage> {
                           _tryRegister(_curp, _pass, context);
                         }else{
                           AlertDialog(
-                            title: const Text('AlertDialog Title'),
+                            title: const Text('Error!'),
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: const <Widget>[
-                                  Text('This is a demo alert dialog.'),
-                                  Text('Would you like to approve of this message?'),
+                                  Text('Oh no!'),
+                                  Text('A ocurrido un error, porfavor intentalo de nuevo'),
                                 ],
                               ),
                             ),
@@ -201,7 +201,7 @@ class _RegisterPage extends State<RegisterPage> {
       enableInteractiveSelection: false,
       decoration: InputDecoration(
         hintText: 'Fecha de nacimiento',
-        labelText: 'Fecha',
+        labelText: 'Fecha de nacimiento',
         suffixIcon: Icon(Icons.perm_contact_calendar),
         icon: Icon(Icons.calendar_today),
         border: OutlineInputBorder(
@@ -238,7 +238,9 @@ class _RegisterPage extends State<RegisterPage> {
             _firestore.collection('usuariosLeon').doc(cred.user.uid).set({
                 'nombre': _nomcom,
                 'apellidos': _apellidos,
-                'fechnam': _fecha
+                'fechnam': _fecha,
+                'esdeudor':'no',
+                'fechavencimiento':_fecha
             });
 
             return AlertDialog(

@@ -9,9 +9,9 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if( auth.currentUser != null ){
+    /*if( auth.currentUser != null ){
      Navigator.pushNamed(context, 'mapscreen');
-    }
+    }*/
  
     var _controllerCURP = TextEditingController();
     
@@ -82,6 +82,7 @@ class LoginPage extends StatelessWidget {
                       child:
                         ElevatedButton(
                           onPressed: () => {
+                            
                             if(_formKey.currentState.validate()){
                               _tryLogin(_curp, _pass, context)
                             }else{

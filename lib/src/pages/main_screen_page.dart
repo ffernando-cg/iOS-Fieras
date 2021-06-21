@@ -1,10 +1,7 @@
-import 'dart:async';
-
 import 'package:app_leon_project/src/pages/myprofile_page.dart';
+import 'package:app_leon_project/src/pages/pagobus_page.dart';
 import 'package:app_leon_project/src/providers/map_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_search_bar/flutter_search_bar.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class MainScreenPage extends StatefulWidget {
@@ -17,28 +14,17 @@ class MainScreenPage extends StatefulWidget {
 class _MainScreenPageState extends State<MainScreenPage> {
     int _selectedIndex = 0;
     static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
+
     static List<Widget> _widgetOptions = <Widget>[
     Scaffold(
       body: MapProvider()
     ),
-    ListView(
-      children: <Widget>[
-        Text(
-        'My PagoBus',
-        style: optionStyle,
-      ),
-      ]
+    Scaffold(
+      body: PagoBusPage()
     ),
     Scaffold(
       body: MyProfilePage()
-    ),
-    ListView(
-      children: <Widget>[
-        Text(
-        'FeedBack?',
-        style: optionStyle,
-      ),
-      ]
     ),
   ];
 
@@ -56,27 +42,22 @@ class _MainScreenPageState extends State<MainScreenPage> {
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.map),
-            label: 'Map and Routes',
+            label: 'Mapas y Rutas',
             backgroundColor: Colors.blue
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bus_alert),
-            label: 'My PagoBus',
+            label: 'Mi PagoBus',
             backgroundColor: Colors.blueAccent
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'My Profile',
+            label: 'Mi Perfil',
             backgroundColor: Colors.orange
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.feedback_sharp),
-            label: 'Feedback?',
-            backgroundColor: Colors.orangeAccent
-          )
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.grey[400],
+        selectedItemColor: Colors.blue[400],
         onTap: _onItemTap,
       ),
     );
