@@ -38,6 +38,7 @@ dependencies:
   flutter_document_picker: ^4.0.1
   url_launcher: ^6.0.6
   flutter_animarker: ^3.2.0
+  firebase_storage: ^8.1.3
 
  
 

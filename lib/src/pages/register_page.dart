@@ -28,7 +28,7 @@ class _RegisterPage extends State<RegisterPage> {
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.more_vert),
-              tooltip: 'Dudas? Seguimos',
+              tooltip: 'Dudas?',
               onPressed: () {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Todos los datos pedidos son para su seguirdad y evitar acciones fraudulentas')));

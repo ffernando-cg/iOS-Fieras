@@ -143,8 +143,16 @@ class _EditPassPageState extends State<EditPassPage> {
                         );
 
                         user.reauthenticateWithCredential(credential).then((value) => _tryUpdate(context))
-                        .catchError((onError) => isPassError = true);
-
+                        .catchError((e){
+                              switch (e.message) {
+                                    case 'The password is invalid or the user does not have a password.':
+                                      isPassError=true;
+                                      _formKey.currentState.validate();
+                                      break;
+                                    default:
+                                      print('Case ${e.message} is not yet implemented');
+                                  }
+                            }); 
                       }else{
                         AlertDialog(
                           title: const Text('Hay campos incorrectos'),

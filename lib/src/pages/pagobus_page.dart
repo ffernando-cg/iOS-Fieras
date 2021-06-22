@@ -1,5 +1,8 @@
+import 'dart:io';
+import 'package:app_leon_project/src/providers/firebase_storage_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_document_picker/flutter_document_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,7 +13,7 @@ class PagoBusPage extends StatefulWidget {
 }
 
 
-final String urlString = 'https://www.sat.gob.mx/personas';
+String urlString = 'https://www.sat.gob.mx/personas';
 
 class _PagoBusPageState extends State<PagoBusPage> {
   FirebaseAuth _auth = FirebaseAuth.instance;
@@ -23,6 +26,7 @@ class _PagoBusPageState extends State<PagoBusPage> {
   bool _iosPublicDataUTI = true;
   bool _checkByCustomExtension = false;
   bool _checkByMimeType = false;
+  bool _isFileUploaded = false;
 
   bool _isPagoBusExpired = false;
 
@@ -55,9 +59,34 @@ class _PagoBusPageState extends State<PagoBusPage> {
             }
         );
 
+        Future uploadDocs(File document)async{
+            if(document == null) return;
+            final fileName = document.path.split('/').last;
+            final destination = '$uid/$fileName';
+            FirebaseApi.uploadFile(destination, document);
+
+          var referencedFecha = _fechaVencimiento.split('/').first + '/' +_fechaVencimiento.split('/')[1];
+          int newExpiredDate = int.parse(_fechaVencimiento.split('/').last) + 1;
+           var newfechaVencimiento= '$referencedFecha/$newExpiredDate';  
+          print(newfechaVencimiento);
 
 
+            FirebaseStorage.instance.ref(destination).getDownloadURL()
+              .then((url) => {
+                  setState(() {
+                    _isFileUploaded = true;
+                    _path = url;
+                    urlString = _path;
+                    
+                  })
+              }).then((value) => 
+              _firestore.collection('usuariosLeon').doc(uid).update({
+                    "fechavencimiento": newfechaVencimiento
+              })
+              );
 
+              
+        }
 
       return Scaffold(
         appBar: AppBar(
@@ -67,7 +96,8 @@ class _PagoBusPageState extends State<PagoBusPage> {
             IconButton(
             icon: Icon(Icons.upload_file),
             onPressed: (){
-              print('Entro');
+              File document = File(_path);
+              uploadDocs(document);
             },
           )
           ],
@@ -91,6 +121,8 @@ class _PagoBusPageState extends State<PagoBusPage> {
                 Theme.of(context).platform == TargetPlatform.iOS
                     ? _buildIOSParams()
                     : _buildAndroidParams(),
+
+                _isFileUploaded ? _showButtonForUploadedDocument() : Container(),
               ],
             ),
           ),
@@ -99,6 +131,13 @@ class _PagoBusPageState extends State<PagoBusPage> {
           child: Icon(Icons.add),
           onPressed: _pickFileInProgress ? null : _pickDocument,
         ),
+      );
+  }
+
+  Widget _showButtonForUploadedDocument() {
+    return ElevatedButton(
+      onPressed: _launchURL, 
+      child: Text('Ver documento subido')
       );
   }
 
@@ -298,3 +337,5 @@ class _PagoBusPageState extends State<PagoBusPage> {
 
 void _launchURL() async =>
   await canLaunch(urlString) ? await launch(urlString) : throw 'Could not launch';
+
+//  Future<String>
