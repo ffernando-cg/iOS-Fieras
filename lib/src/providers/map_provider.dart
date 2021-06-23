@@ -9,7 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 const kStartPosition = LatLng(21.170814, -101.739300);
 const kSantoDomingo = CameraPosition(target: kStartPosition, zoom: 15);
 const kMarkerId = MarkerId('MarkerId1');
-const kDuration = Duration(seconds: 2);
+const kDuration = Duration(seconds: 1);
 const kLocations = [
   kStartPosition,
   LatLng(21.170067, -101.740830),

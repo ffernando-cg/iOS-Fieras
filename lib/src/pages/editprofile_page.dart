@@ -44,18 +44,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
       );
 
       _tryUpdate(BuildContext context){
-      _firestore.collection('usuariosLeon').doc(uid).update({
-        "apellidos":_apellido,
-        "fechnam": _fecha.toString(),
-        "nombre": _nombre,
-      }).then((value) {
-          ScaffoldMessenger.of(context).showSnackBar(
-             const SnackBar(
-              content: Text('Cuenta modificada correctamente'),
-            ),
-          );
-          Navigator.pop(context);
-      }
+        _firestore.collection('usuariosLeon').doc(uid).update({
+          "apellidos":_apellido,
+          "fechnam": _fecha.toString(),
+          "nombre": _nombre,
+        }).then((value) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cuenta modificada correctamente'),
+              ),
+            );
+            Navigator.pop(context);
+        }
       );
   }
 

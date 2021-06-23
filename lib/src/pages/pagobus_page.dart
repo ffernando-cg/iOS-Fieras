@@ -60,11 +60,16 @@ class _PagoBusPageState extends State<PagoBusPage> {
         );
 
         Future uploadDocs(File document)async{
+          setState(() {
+            _pickFileInProgress = true;
+          });
             if(document == null) return;
             final fileName = document.path.split('/').last;
             final destination = '$uid/$fileName';
-            FirebaseApi.uploadFile(destination, document);
 
+            try{
+            FirebaseApi.uploadFile(destination, document);
+        
           var referencedFecha = _fechaVencimiento.split('/').first + '/' +_fechaVencimiento.split('/')[1];
           int newExpiredDate = int.parse(_fechaVencimiento.split('/').last) + 1;
            var newfechaVencimiento= '$referencedFecha/$newExpiredDate';  
@@ -72,20 +77,22 @@ class _PagoBusPageState extends State<PagoBusPage> {
 
 
             FirebaseStorage.instance.ref(destination).getDownloadURL()
-              .then((url) => {
+              .then((url){
                   setState(() {
                     _isFileUploaded = true;
                     _path = url;
                     urlString = _path;
-                    
-                  })
+                    _pickFileInProgress = false;
+                  });
+                  sleep(Duration(seconds:5));
               }).then((value) => 
               _firestore.collection('usuariosLeon').doc(uid).update({
                     "fechavencimiento": newfechaVencimiento
               })
               );
-
-              
+            }catch(val) {
+              print(val);
+            }
         }
 
       return Scaffold(

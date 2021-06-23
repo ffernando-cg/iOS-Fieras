@@ -36,7 +36,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
                     child: Text("BORRAR", style: TextStyle(color: Colors.red),),
                     onPressed: (){ 
                       _firestore.collection('usuariosLeon').doc(uid).delete().then((value){
-                        _auth.signOut();
                         user.delete();
                         Navigator.of(context).popUntil((route)=> route.isFirst);
                       }

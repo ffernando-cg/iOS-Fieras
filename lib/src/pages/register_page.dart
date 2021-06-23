@@ -219,8 +219,8 @@ class _RegisterPage extends State<RegisterPage> {
     DateTime picked = await showDatePicker(
       context: context, 
       initialDate: new DateTime.now(), 
-      firstDate: new DateTime(2017), 
-      lastDate: new DateTime(2030)
+      firstDate: new DateTime(1900), 
+      lastDate: new DateTime(2022)
       );
 
       if(picked != null){
@@ -240,19 +240,15 @@ class _RegisterPage extends State<RegisterPage> {
                 'apellidos': _apellidos,
                 'fechnam': _fecha,
                 'esdeudor':'no',
-                'fechavencimiento':_fecha
+                'fechavencimiento': '20/06/2021'
             });
 
-            return AlertDialog(
-              title: const Text('Usuario creado'),
-              content: const Text('Usuario creado correctamente, ahora puede iniciar sesión'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, '/'),
-                  child: const Text('OK'),
-                ),
-              ],
-            ); 
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Cuenta creada correctamente'),
+              ),
+            );
+            Navigator.pop(context);
           }
         ).catchError((e){
           switch (e.message) {
