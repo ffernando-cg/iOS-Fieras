@@ -93,9 +93,6 @@ class _RegisterPage extends State<RegisterPage> {
                         labelText: 'CURP',
                       ),
                       validator: (String val){
-                        if(isCurpError){
-                          return('El curp proporcionado no existe');
-                        }
                         if(val.trim().isEmpty){
                           return('CURP is required');
                         }
@@ -119,6 +116,11 @@ class _RegisterPage extends State<RegisterPage> {
                           ),
                         labelText: 'Contraseña',
                       ),
+                      onChanged: (String val){
+                        setState(() {
+                          _pass = val.trim();
+                        });
+                      },
                       validator: (String val){
                           if(isPassError){
                             return('La contraseña proporcionada es incorrecta');
@@ -146,13 +148,14 @@ class _RegisterPage extends State<RegisterPage> {
                           ),
                         labelText: 'Confirmar contraseña',
                       ),
-                     /* onChanged: (String val){
+                     onChanged: (String val){
                         setState(() {
                           _conpass = val.trim();
                         });
-                      },*/
+                      },
                       validator: (String val){
                           if(isConfirmPassError){
+                            isConfirmPassError = false;
                             return('La contraseñas no coinciden');
                           }
                           if(val.trim().isEmpty){

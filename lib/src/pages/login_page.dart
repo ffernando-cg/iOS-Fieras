@@ -42,6 +42,7 @@ class LoginPage extends StatelessWidget {
                       ),
                       validator: (String val){
                         if(isCurpError){
+                          isCurpError = false;
                           return('El curp proporcionado no existe');
                         }
                         if(val.trim().isEmpty){
@@ -65,6 +66,7 @@ class LoginPage extends StatelessWidget {
                         ),
                         validator: (String val){
                           if(isPassError){
+                            isPassError=false;
                             return('La contraseña proporcionada es incorrecta');
                           }
                           if(val.trim().isEmpty){
@@ -81,10 +83,9 @@ class LoginPage extends StatelessWidget {
                       padding: EdgeInsets.only(top:25),
                       child:
                         ElevatedButton(
-                          onPressed: () => {
-                            
+                          onPressed: (){
                             if(_formKey.currentState.validate()){
-                              _tryLogin(_curp, _pass, context)
+                              _tryLogin(_curp, _pass, context);
                             }else{
                               SnackBar(
                                 content: Text('Oh no! Algo malo acaba de ocurrir, porfavor intente de nuevo. Puede que su curp o contraseña esté erroneos, verifiquelo'),
@@ -94,7 +95,7 @@ class LoginPage extends StatelessWidget {
                                     // Some code to undo the change.
                                   },
                                 ),
-                              )
+                              );
                             }
                             },
                           child: Text('Log-in'),
@@ -123,6 +124,7 @@ class LoginPage extends StatelessWidget {
   }
 
   _tryLogin(String curp, String pass, BuildContext context){
+      
         auth.signInWithEmailAndPassword(email: curp, password: pass).then(
           (value) => Navigator.pushNamed(context, 'mapscreen')
         ).catchError((e){

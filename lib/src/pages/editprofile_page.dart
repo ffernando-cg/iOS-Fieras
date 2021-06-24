@@ -21,7 +21,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   final _formKeyRegister = GlobalKey<FormState>();
 
-  bool isCurpError=false, isPassError=false, isConfirmPassError=false;
   int _value = 1;
   
 
@@ -85,9 +84,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         labelText: 'CURP',
                       ),
                       validator: (String val){
-                        if(isCurpError){
-                          return('El curp proporcionado no existe');
-                        }
                         if(val.trim().isEmpty){
                           return('CURP is required');
                         }
@@ -143,9 +139,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   ])),
                     ElevatedButton(
                       onPressed: (){
-                        // if(_conpass != _pass){
-                        //   isConfirmPassError=true;
-                        // }
 
                         if(_formKeyRegister.currentState.validate()){
                           _tryUpdate(context);

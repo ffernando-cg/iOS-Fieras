@@ -62,6 +62,7 @@ class _EditPassPageState extends State<EditPassPage> {
                       ),
                       validator: (String val){
                         if(isPassError){
+                            isPassError = false;
                             return('La contraseña proporcionada es incorrecta');
                           }
 
@@ -89,6 +90,11 @@ class _EditPassPageState extends State<EditPassPage> {
                           ),
                         labelText: 'Contraseña nueva',
                       ),
+                      onChanged: (String val){
+                        setState(() {
+                          _newpass = val.trim();
+                        });
+                      },
                       validator: (String val){
                           if(val.trim().isEmpty){
                             return('La contraseña es requerida');
@@ -113,8 +119,14 @@ class _EditPassPageState extends State<EditPassPage> {
                           ),
                         labelText: 'Confirmar contraseña nueva',
                       ),
+                      onChanged: (String val){
+                        setState(() {
+                          _confpass = val.trim();
+                        });
+                      },
                       validator: (String val){
                           if(isConfirmPassError){
+                            isConfirmPassError=false;
                             return('La contraseñas nuevas no coinciden');
                           }
                           if(val.trim().isEmpty){
